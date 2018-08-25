@@ -26,8 +26,7 @@ export default async (options: IOptions =
         .parks
         .list();
 
-      logger.log('info', JSON.stringify(parks, null, 4));
-      // await models.location.addUpdateParks(parks);
+      logger.log('info', `Retrieved ${parks.length} park locations.`);
       const response = await fetch(`${config.services.root}${config.services.locationsRoot}`, {
         body: JSON.stringify(parks),
         headers: {
@@ -36,24 +35,44 @@ export default async (options: IOptions =
         method: 'post'
       });
 
-      console.log(await response.text());
+      if (response.ok) {
+        const locs = await response.json();
+        logger.log('info', `Successfully added or updated ${locs.length} park locations.`);
+      } else {
+        const text = await response.text();
+        logger.log('error', `There was error trying to update park locations ${text}`);
+      }
     } catch (e) {
       logger.log('error', e.toString());
     }
   }
 
-  // if (options.locations) {
-  //   try {
-  //     const hotels = await realtimeModels
-  //       .hotels
-  //       .list();
+  if (options.locations) {
+    try {
+      const hotels = await realtimeModels
+        .hotels
+        .list();
 
-  //     logger.log('info', JSON.stringify(hotels, null, 4));
-  //     // await models.location.addUpdateHotels(hotels);
-  //   } catch (e) {
-  //     logger.log('error', e.toString());
-  //   }
-  // }
+      logger.log('info', `Retrieved ${hotels.length} hotel locations.`);
+      const response = await fetch(`${config.services.root}${config.services.locationsRoot}`, {
+        body: JSON.stringify(hotels),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'post'
+      });
+
+      if (response.ok) {
+        const locs = await response.json();
+        logger.log('info', `Successfully added or updated ${locs.length} park locations.`);
+      } else {
+        const text = await response.text();
+        logger.log('error', `There was error trying to update park locations ${text}`);
+      }
+    } catch (e) {
+      logger.log('error', e.toString());
+    }
+  }
 
   if (options.activities) {
     try {
