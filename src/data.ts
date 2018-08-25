@@ -1,4 +1,6 @@
+import fetch from 'node-fetch';
 import { realtime } from 'wdw-data';
+import config from './config/index';
 import logger from './log';
 
 interface IOptions {
@@ -26,23 +28,32 @@ export default async (options: IOptions =
 
       logger.log('info', JSON.stringify(parks, null, 4));
       // await models.location.addUpdateParks(parks);
+      const response = await fetch(`${config.services.root}${config.services.locationsRoot}`, {
+        body: JSON.stringify(parks),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'post'
+      });
+
+      console.log(await response.text());
     } catch (e) {
       logger.log('error', e.toString());
     }
   }
 
-  if (options.locations) {
-    try {
-      const hotels = await realtimeModels
-        .hotels
-        .list();
+  // if (options.locations) {
+  //   try {
+  //     const hotels = await realtimeModels
+  //       .hotels
+  //       .list();
 
-      logger.log('info', JSON.stringify(hotels, null, 4));
-      // await models.location.addUpdateHotels(hotels);
-    } catch (e) {
-      logger.log('error', e.toString());
-    }
-  }
+  //     logger.log('info', JSON.stringify(hotels, null, 4));
+  //     // await models.location.addUpdateHotels(hotels);
+  //   } catch (e) {
+  //     logger.log('error', e.toString());
+  //   }
+  // }
 
   if (options.activities) {
     try {
