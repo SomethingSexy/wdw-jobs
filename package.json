@@ -1,0 +1,52 @@
+{
+  "name": "wdw-jobs",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Jobs for updating wdw data.",
+  "main": "./modules/index.js",
+  "typings": "./index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir ./modules && copyfiles -u 1 './src/**/*.json' modules",
+    "postversion": "git push && git push --tags",
+    "start": "ts-node ./src/server.ts",
+    "service:data": "ts-node ./scripts/data.ts --type locations",
+    "service:schedules": "ts-node ./scripts/schedules.ts",
+    "service:waittimes": "ts-node ./scripts/waittimes.ts",
+    "test": "mocha --opts test/mocha.opts",
+    "version": "npm run build && git add -A modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://somethingsexy@github.com/SomethingSexy/wdw-jobs.git"
+  },
+  "author": "Tyler Cvetan",
+  "bugs": {
+    "url": "https://github.com/SomethingSexy/wdw-jobs/issues"
+  },
+  "homepage": "https://github.com/SomethingSexy/wdw-jobs#readme",
+  "dependencies": {
+    "command-line-args": "^5.0.2",
+    "moment": "^2.22.2",
+    "moment-holiday": "^1.5.1",
+    "moment-timezone": "^0.5.21",
+    "node-fetch": "^2.2.0",
+    "wdw-data": "github:SomethingSexy/wdw-data#v0.1.0",
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/moment-holiday": "^1.5.0",
+    "chai": "^4.1.2",
+    "copyfiles": "^2.0.0",
+    "mocha": "^5.2.0",
+    "ts-loader": "^3.5.0",
+    "ts-node": "^5.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.10.0",
+    "tslint-config-standard": "^7.1.0",
+    "tslint-eslint-rules": "^4.1.1",
+    "tslint-loader": "^3.6.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.0.1"
+  }
+}
