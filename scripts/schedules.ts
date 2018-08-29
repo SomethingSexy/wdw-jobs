@@ -1,3 +1,16 @@
-import schedules from '../src/worker/schedules';
+import commandLineArgs from 'command-line-args';
+import locationSchedules from '../src/locationSchedules';
 
-schedules(2).then(() => process.exit);
+const optionDefinitions = [
+  {
+    defaultValue: ['activities', 'locations'],
+    multiple: true,
+    name: 'type',
+    type: String,
+  }
+];
+
+const options = commandLineArgs(optionDefinitions);
+if (options.type.includes('locations')) {
+  locationSchedules(4).then(() => process.exit);
+}

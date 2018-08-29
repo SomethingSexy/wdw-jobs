@@ -36,8 +36,8 @@ export default async (options: IOptions =
       });
 
       if (response.ok) {
-        const locs = await response.json();
-        logger.log('info', `Successfully added or updated ${locs.length} park locations.`);
+        const list = await response.json();
+        logger.log('info', `Successfully added or updated ${list.length} park locations.`);
       } else {
         const text = await response.text();
         logger.log('error', `There was error trying to update park locations ${text}`);
@@ -63,8 +63,8 @@ export default async (options: IOptions =
       });
 
       if (response.ok) {
-        const locs = await response.json();
-        logger.log('info', `Successfully added or updated ${locs.length} park locations.`);
+        const list = await response.json();
+        logger.log('info', `Successfully added or updated ${list.length} park locations.`);
       } else {
         const text = await response.text();
         logger.log('error', `There was error trying to update park locations ${text}`);
@@ -80,8 +80,22 @@ export default async (options: IOptions =
         .attractions
         .list();
 
-      logger.log('info', JSON.stringify(attractions, null, 4));
-      // await models.activity.addUpdateActivities(attractions);
+      logger.log('info', `Retrieved ${attractions.length} attractions.`);
+      const response = await fetch(`${config.services.root}${config.services.activitiesRoot}`, {
+        body: JSON.stringify(attractions),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'post'
+      });
+
+      if (response.ok) {
+        const list = await response.json();
+        logger.log('info', `Successfully added or updated ${list.length} park attractions.`);
+      } else {
+        const text = await response.text();
+        logger.log('error', `There was error trying to update park attractions ${text}`);
+      }
     } catch (e) {
       logger.log('error', e.toString());
     }
@@ -93,8 +107,22 @@ export default async (options: IOptions =
         .entertainment
         .list();
 
-      logger.log('info', JSON.stringify(entertainment, null, 4));
-      // await models.activity.addUpdateActivities(entertainment);
+      logger.log('info', `Retrieved ${entertainment.length} entertainment.`);
+      const response = await fetch(`${config.services.root}${config.services.activitiesRoot}`, {
+        body: JSON.stringify(entertainment),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'post'
+      });
+
+      if (response.ok) {
+        const list = await response.json();
+        logger.log('info', `Successfully added or updated ${list.length} entertainment.`);
+      } else {
+        const text = await response.text();
+        logger.log('error', `There was error trying to update entertainment ${text}`);
+      }
     } catch (e) {
       logger.log('error', e.toString());
     }
@@ -104,9 +132,24 @@ export default async (options: IOptions =
     try {
       const dining = await realtimeModels
         .dining
-        .list({ max: 50 });
-      logger.log('info', JSON.stringify(dining, null, 4));
-      // await models.dining.addUpdate(dining);
+        .list({ max: 60 });
+
+      logger.log('info', `Retrieved ${dining.length} dining.`);
+      const response = await fetch(`${config.services.root}${config.services.diningRoot}`, {
+        body: JSON.stringify(dining),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'post'
+      });
+
+      if (response.ok) {
+        const list = await response.json();
+        logger.log('info', `Successfully added or updated ${list.length} dining.`);
+      } else {
+        const text = await response.text();
+        logger.log('error', `There was error trying to update dining ${text}`);
+      }
     } catch (e) {
       logger.log('error', e.toString());
     }

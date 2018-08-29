@@ -9,6 +9,8 @@ export interface IServerConfig {
   name: string;
   port: string | number;
   services: {
+    activitiesRoot: string | undefined;
+    diningRoot: string | undefined;
     locationsRoot: string | undefined;
     root: string | undefined;
   };
