@@ -1,4 +1,5 @@
 import commandLineArgs from 'command-line-args';
+import activitySchedules from '../src/activitySchedules';
 import locationSchedules from '../src/locationSchedules';
 
 const optionDefinitions = [
@@ -13,4 +14,6 @@ const optionDefinitions = [
 const options = commandLineArgs(optionDefinitions);
 if (options.type.includes('locations')) {
   locationSchedules(4).then(() => process.exit);
+} else if (options.type.includes('activities')) {
+  activitySchedules(4).then(() => process.exit);
 }

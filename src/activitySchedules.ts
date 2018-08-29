@@ -1,22 +1,38 @@
 import moment from 'moment';
 import 'moment-holiday';
-import { createModels, realtime } from 'wdw-data';
+import fetch from 'node-fetch';
+import { realtime } from 'wdw-data';
+import config from './config/index';
 import logger from './log';
 /**
  * Service for updating hours
  */
 export default async (days?: number) => {
-  // get all activities that can fetch schedules
-  const entertainment = await models.activity.list({ fetchSchedule: true });
+  const realtimeModels = realtime(logger);
+  const response = await fetch(
+    `${config.services.root}${config.services.activitiesRoot}?fetchSchedule=true`, {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      method: 'get'
+    }
+  );
 
-  logger.log('info', 'retrieving entertainment schedules');
-  let entertainmentSchedules: any[] = await realtimeModels.entertainment.schedule(startDate);
-  logger.log('info', 'retrieved entertainment schedules');
+  if (!response.ok) {
+    logger.log('error', `There was an issue trying to fetch activities ${response.statusText}.`);
+  }
 
-  entertainmentSchedules = entertainmentSchedules
+  const activities = await response.json();
+  logger.log('info', `Found ${activities.length} activities to find schedules for.`);
+
+  const startDate = moment().format('YYYY-MM-DD');
+  let activitySchedules: any[] = await realtimeModels.entertainment.schedule(startDate);
+  logger.log('info', 'Retrieved entertainment schedules');
+
+  activitySchedules = activitySchedules
     .reduce(
       (all, eS) => {
-        const found = entertainment.find(e => e.extId === eS.id);
+        const found = activities.find(e => e.extId === eS.id);
         if (!found) {
           return all;
         }
@@ -29,12 +45,29 @@ export default async (days?: number) => {
       []
     );
 
-  for (const entertainmentSchedule of entertainmentSchedules) {
-    logger.log('info', 'Adding schedule to database');
-    await models.activity.addSchedules(
-      entertainmentSchedule.id,
-      entertainmentSchedule.schedule
+  for (const activitySchedule of activitySchedules) {
+    const postResponse = await fetch(
+      `${config.services.root}${config.services.activitiesRoot}/${activitySchedule.id}/schedules`, {
+        body: JSON.stringify(activitySchedule.schedule),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'post'
+      }
     );
+
+    if (postResponse.ok) {
+      logger.log(
+        'info',
+        `Successfully updated schedules for activity ${activitySchedule.id}.`
+      );
+    } else {
+      logger.log(
+        'error',
+        `Failed to updated schedules for activity ${activitySchedule.id} ${postResponse.statusText}.` // tslint:disable-line
+    );
+    }
   }
+
   return null;
 };
