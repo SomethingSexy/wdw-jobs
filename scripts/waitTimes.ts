@@ -1,3 +1,3 @@
-import waitTimes from '../src/worker/waittimes';
+import waitTimes from '../src/waittimes';
 
 waitTimes().then(() => process.exit);

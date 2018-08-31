@@ -1,28 +1,30 @@
 import moment from 'moment';
 import 'moment-holiday';
-import { createModels, realtime } from 'wdw-data';
+import fetch from 'node-fetch';
+import { realtime } from 'wdw-data';
+import config from './config/index';
 import logger from './log';
 
 /**
  * Service for updating hours
  */
 export default async () => {
-  // setup our database connection
-  const models = await createModels(
-    {
-      database: 'wdw',
-      logging: true,
-      pool: {
-        max: 100 // TODO: only here because we are kicking off a shit ton of async inserts
+  const realtimeModels = realtime(logger);
+  const response = await fetch(
+    `${config.services.root}${config.services.locationsRoot}?type=theme-park`, {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
       },
-      username: 'tylercvetan',
-    },
-    logger
+      method: 'get'
+    }
   );
 
-  const realtimeModels = realtime(logger);
+  if (!response.ok) {
+    logger.log('error', `There was an issue trying to fetch locations ${response.statusText}.`);
+  }
 
-  const parks = await models.location.list();
+  const parks = await response.json();
+  logger.log('info', `Found ${parks.length} locations to find schedules for.`);
   // save the same timestamp for all
   const timeStamp = moment.utc().format();
 
@@ -38,10 +40,23 @@ export default async () => {
     )
   );
 
-  for (const waitTime of responses) {
-    await models.activity.addWaitTimes(
-      timeStamp,
-      waitTime
+  const waitTimes = responses.reduce((all, r) => all.concat(r), []);
+  const postResponse = await fetch(
+    `${config.services.root}${config.services.activitiesRoot}/waittimes/${timeStamp}`, {
+      body: JSON.stringify(waitTimes),
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      method: 'post'
+    }
+  );
+
+  if (postResponse.ok) {
+    logger.log('info', `Successfully updated wait times.`);
+  } else {
+    logger.log(
+      'error',
+      `Failed to updated wait times.`
     );
   }
 

@@ -58,7 +58,7 @@ export default async (days?: number) => {
       logger.log(
         'error',
         `Failed to updated schedules for location ${parkSchedule.id} ${postResponse.statusText}.`
-    );
+      );
     }
   }
 
