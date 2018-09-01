@@ -6,9 +6,9 @@
   "main": "./modules/index.js",
   "typings": "./index.d.ts",
   "scripts": {
-    "build": "tsc --outDir ./modules && copyfiles -u 1 './src/**/*.json' modules",
+    "build": "tsc --outDir ./modules",
     "postversion": "git push && git push --tags",
-    "start": "ts-node ./src/server.ts",
+    "start": "ts-node -r dotenv/config ./src/server.ts",
     "service:data": "ts-node -r dotenv/config ./scripts/data.ts --type dining",
     "service:location:schedules": "ts-node -r dotenv/config ./scripts/schedules.ts --type locations",
     "service:activities:schedules": "ts-node -r dotenv/config ./scripts/schedules.ts --type activities",
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/SomethingSexy/wdw-jobs#readme",
   "dependencies": {
+    "bull": "^3.4.7",
     "command-line-args": "^5.0.2",
     "dotenv": "^6.0.0",
     "joi": "^13.6.0",
@@ -37,7 +38,10 @@
     "winston": "^3.0.0"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.5.24",
+    "@types/bull": "^3.3.20",
     "@types/chai": "^4.1.4",
+    "@types/ioredis": "^4.0.1",
     "@types/joi": "^13.4.4",
     "@types/moment-holiday": "^1.5.0",
     "chai": "^4.1.2",

@@ -2,13 +2,10 @@ import moment from 'moment';
 import 'moment-holiday';
 import fetch from 'node-fetch';
 import { realtime } from 'wdw-data';
-import config from './config/index';
-import logger from './log';
+import config from '../config/index';
+import logger from '../log';
 
-/**
- * Service for updating hours
- */
-export default async () => {
+export default async _ => {
   const realtimeModels = realtime(logger);
   const response = await fetch(
     `${config.services.root}${config.services.locationsRoot}?type=theme-park`, {
@@ -24,7 +21,7 @@ export default async () => {
   }
 
   const parks = await response.json();
-  logger.log('info', `Found ${parks.length} locations to find schedules for.`);
+  logger.log('info', `Found ${parks.length} locations to find wait times for.`);
   // save the same timestamp for all
   const timeStamp = moment.utc().format();
 
