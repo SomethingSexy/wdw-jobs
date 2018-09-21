@@ -1,5 +1,6 @@
 import joi from 'joi';
 import { IServerConfig } from '../types';
+import job from './job';
 import log from './log';
 import services from './services';
 
@@ -22,6 +23,7 @@ if (error) {
 
 const config: IServerConfig = {
   ...envVars,
+  job,
   log,
   services
 };

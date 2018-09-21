@@ -21,7 +21,7 @@ exports.default = async (_) => {
         log_1.default.log('error', `There was an issue trying to fetch locations ${response.statusText}.`);
     }
     const parks = await response.json();
-    log_1.default.log('info', `Found ${parks.length} locations to find schedules for.`);
+    log_1.default.log('info', `Found ${parks.length} locations to find wait times for.`);
     // save the same timestamp for all
     const timeStamp = moment_1.default.utc().format();
     const responses = await Promise.all(parks.reduce((all, park) => {

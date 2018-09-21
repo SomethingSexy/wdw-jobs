@@ -1,4 +1,9 @@
 export interface IServerConfig {
+  job: {
+    activitiesScheduleCron: string | undefined;
+    locationsScheduleCron: string | undefined;
+    waittimesEvery: number;
+  };
   log: {
     console: string | boolean | undefined;
     errorFile: string | undefined;

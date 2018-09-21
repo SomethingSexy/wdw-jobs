@@ -2,12 +2,14 @@ import moment from 'moment';
 import 'moment-holiday';
 import fetch from 'node-fetch';
 import { realtime } from 'wdw-data';
-import config from './config/index';
-import logger from './log';
+import config from '../config/index';
+import logger from '../log';
+
 /**
- * Service for updating hours
+ * A job for updating the hours for supported locations.
  */
-export default async (days?: number) => {
+export default async job => {
+  const days = job.data.days;
   const realtimeModels = realtime(logger);
   const response = await fetch(
     `${config.services.root}${config.services.locationsRoot}?fetchSchedule=true`, {
