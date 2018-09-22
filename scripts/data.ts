@@ -3,7 +3,7 @@ import data from '../src/data';
 
 const optionDefinitions = [
   {
-    defaultValue: ['activities', 'dining', 'locations'],
+    defaultValue: ['activities', 'dining', 'locations', 'shops'],
     multiple: true,
     name: 'type',
     type: String,
@@ -23,5 +23,7 @@ if (options.type.includes('activities')) {
 if (options.type.includes('dining')) {
   dataOptions = { locations: false, dining: true, activities: false };
 }
-
+if (options.type.includes('shops')) {
+  dataOptions = { locations: false, dining: false, activities: false, shops: true };
+}
 data(dataOptions).then(() => process.exit);

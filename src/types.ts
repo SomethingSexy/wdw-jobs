@@ -18,5 +18,6 @@ export interface IServerConfig {
     diningRoot: string | undefined;
     locationsRoot: string | undefined;
     root: string | undefined;
+    shopsRoot: string | undefined;
   };
 }

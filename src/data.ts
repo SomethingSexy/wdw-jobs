@@ -7,6 +7,7 @@ interface IOptions {
   activities?: boolean;
   dining?: boolean;
   locations?: boolean;
+  shops?: boolean;
 }
 
 /**
@@ -149,6 +150,33 @@ export default async (options: IOptions =
       } else {
         const text = await response.text();
         logger.log('error', `There was error trying to update dining ${text}`);
+      }
+    } catch (e) {
+      logger.log('error', e.toString());
+    }
+  }
+
+  if (options.shops) {
+    try {
+      const shops = await realtimeModels
+        .shops
+        .list({ max: 60 });
+
+      logger.log('info', `Retrieved ${shops.length} shops.`);
+      const response = await fetch(`${config.services.root}${config.services.shopsRoot}`, {
+        body: JSON.stringify(shops),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'post'
+      });
+
+      if (response.ok) {
+        const list = await response.json();
+        logger.log('info', `Successfully added or updated ${list.length} shops.`);
+      } else {
+        const text = await response.text();
+        logger.log('error', `There was error trying to update shop ${text}`);
       }
     } catch (e) {
       logger.log('error', e.toString());

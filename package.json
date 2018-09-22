@@ -9,7 +9,7 @@
     "build": "tsc --outDir ./modules",
     "postversion": "git push && git push --tags",
     "start": "ts-node -r dotenv/config ./src/server.ts",
-    "service:data": "ts-node -r dotenv/config ./scripts/data.ts --type dining",
+    "service:data": "ts-node -r dotenv/config ./scripts/data.ts --type shops",
     "service:location:schedules": "ts-node -r dotenv/config ./scripts/schedules.ts --type locations",
     "service:activities:schedules": "ts-node -r dotenv/config ./scripts/schedules.ts --type activities",
     "service:waittimes": "ts-node -r dotenv/config ./scripts/waittimes.ts",
