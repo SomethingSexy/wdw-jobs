@@ -12,7 +12,7 @@ export default async job => {
   const days = job.data.days;
   const realtimeModels = realtime(logger);
   const response = await fetch(
-    `${config.services.root}${config.services.locationsRoot}?fetchSchedule=true`, {
+    `${config.services.root}${config.services.parksRoot}?fetchSchedule=true`, {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
@@ -45,7 +45,7 @@ export default async job => {
 
   for (const parkSchedule of responses) {
     const postResponse = await fetch(
-      `${config.services.root}${config.services.locationsRoot}/${parkSchedule.id}/schedules`, {
+      `${config.services.root}${config.services.parksRoot}/${parkSchedule.id}/schedules`, {
         body: JSON.stringify(parkSchedule.schedule),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',

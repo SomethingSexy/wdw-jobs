@@ -1,7 +1,7 @@
 export interface IServerConfig {
   job: {
-    activitiesScheduleCron: string | undefined;
-    locationsScheduleCron: string | undefined;
+    activitiesScheduleCron: string;
+    locationsScheduleCron: string;
     waittimesEvery: number;
   };
   log: {
@@ -17,6 +17,8 @@ export interface IServerConfig {
     activitiesRoot: string | undefined;
     diningRoot: string | undefined;
     locationsRoot: string | undefined;
+    parksRoot: string | undefined;
+    resortsRoot: string | undefined;
     root: string | undefined;
     shopsRoot: string | undefined;
   };

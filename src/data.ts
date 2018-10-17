@@ -6,7 +6,8 @@ import logger from './log';
 interface IOptions {
   activities?: boolean;
   dining?: boolean;
-  locations?: boolean;
+  parks?: boolean;
+  resorts?: boolean;
   shops?: boolean;
 }
 
@@ -14,21 +15,21 @@ interface IOptions {
  * A service for retrieving and persisting waitimes.
  */
 export default async (options: IOptions =
-    { locations: true, dining: true, activities: true }
+    { parks: true, dining: true, activities: true, resorts: true }
 ) => {
   const realtimeModels = realtime(logger);
 
   logger.log('info', `This job is running ${JSON.stringify(options)}.`);
 
   // // grab our realtime park data
-  if (options.locations) {
+  if (options.parks) {
     try {
       const parks = await realtimeModels
         .parks
         .list();
 
       logger.log('info', `Retrieved ${parks.length} park locations.`);
-      const response = await fetch(`${config.services.root}${config.services.locationsRoot}`, {
+      const response = await fetch(`${config.services.root}${config.services.parksRoot}`, {
         body: JSON.stringify(parks),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -48,14 +49,14 @@ export default async (options: IOptions =
     }
   }
 
-  if (options.locations) {
+  if (options.resorts) {
     try {
       const hotels = await realtimeModels
         .hotels
         .list();
 
       logger.log('info', `Retrieved ${hotels.length} hotel locations.`);
-      const response = await fetch(`${config.services.root}${config.services.locationsRoot}`, {
+      const response = await fetch(`${config.services.root}${config.services.resortsRoot}`, {
         body: JSON.stringify(hotels),
         headers: {
           'Content-Type': 'application/json; charset=utf-8',

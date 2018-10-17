@@ -9,9 +9,7 @@
     "build": "tsc --outDir ./modules",
     "postversion": "git push && git push --tags",
     "start": "ts-node -r dotenv/config ./src/server.ts",
-    "service:data": "ts-node -r dotenv/config ./scripts/data.ts --type shops",
-    "service:location:schedules": "ts-node -r dotenv/config ./scripts/schedules.ts --type locations",
-    "service:activities:schedules": "ts-node -r dotenv/config ./scripts/schedules.ts --type activities",
+    "service:data": "ts-node -r dotenv/config ./scripts/data.ts --type parks",
     "service:waittimes": "ts-node -r dotenv/config ./scripts/waittimes.ts",
     "test": "mocha --opts test/mocha.opts",
     "version": "npm run build && git add -A modules"
@@ -34,7 +32,7 @@
     "moment-holiday": "^1.5.1",
     "moment-timezone": "^0.5.21",
     "node-fetch": "^2.2.0",
-    "wdw-data": "github:SomethingSexy/wdw-data#v0.1.0",
+    "wdw-data": "github:SomethingSexy/wdw-data#v0.5.1",
     "winston": "^3.0.0"
   },
   "devDependencies": {
